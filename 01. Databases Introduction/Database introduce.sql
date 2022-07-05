@@ -236,3 +236,116 @@ CREATE TABLE RentalOrders(
 )
 
 SELECT * FROM [RentalOrders]
+
+--Problem 16:
+CREATE DATABASE [SoftUni]
+
+USE [SoftUni]
+
+CREATE TABLE [Towns](
+	[Id] INT PRIMARY KEY IDENTITY,
+	[Name] NVARCHAR(100) NOT NULL
+)
+
+GO
+
+CREATE TABLE [Adresses](
+	[Id] INT PRIMARY KEY IDENTITY,
+	[AdressText] NVARCHAR(MAX) NOT NULL,
+	[TownId] INT FOREIGN KEY REFERENCES [Towns]([Id]) NOT NULL
+)
+
+GO
+
+CREATE TABLE [Departments](
+	[Id] INT PRIMARY KEY IDENTITY,
+	[Name] NVARCHAR(100) NOT NULL
+)
+
+GO
+
+CREATE TABLE [Employees](
+	[Id] INT PRIMARY KEY IDENTITY,
+	[FirstName] NVARCHAR(30) NOT NULL,
+	[MiddleName] NVARCHAR(30) NOT NULL,
+	[LastName] NVARCHAR(30) NOT NULL,
+	[JobTitle] NVARCHAR(30) NOT NULL,
+	[DepartmentId] INT FOREIGN KEY REFERENCES [Departments]([Id]) NOT NULL,
+	[HireDate] DATETIME2 NOT NULL,
+	[Salary] DECIMAL(8, 2),
+	[AdressId] INT FOREIGN KEY REFERENCES [Adresses]([Id]) NOT NULL
+)
+
+--Problem 17 Back up database
+BACKUP DATABASE SoftUni
+TO DISK = 'D:\softuni-backup.bak'
+
+DROP DATABASE SoftUni
+
+RESTORE DATABASE SoftUni
+FROM DISK = 'D:\softuni-backup.bak'
+
+USE SoftUni
+
+--Problem 18
+INSERT INTO [Towns]([Name])
+	VALUES
+	('Sofia'),
+	('Plovdiv'),
+	('Varna'),
+	('Burgas')
+
+SELECT * FROM [Towns]
+
+GO
+
+INSERT INTO [Departments]([Name])
+	VALUES
+	('Engineering'),
+	('Sales'),
+	('Marketing'),
+	('Software Development'),
+	('Quality Assurance')
+
+SELECT * FROM [Departments]
+
+INSERT INTO [Adresses]([AdressText], [TownId])
+	VALUES
+	('UL. T. Kableshkov', 1),
+	('UL. I. Alexandrov', 3)
+
+--ALTER TABLE [Employees]
+--ALTER COLUMN [AdressId] INT FOREIGN KEY REFERENCES [Adresses]([Id])
+
+INSERT INTO [Employees]([FirstName], [MiddleName], [LastName], [JobTitle], [DepartmentId], [HireDate], [Salary], [AdressId])
+	VALUES
+	('Ivan', 'Ivanov', 'Ivanov', '.NET Developer', 4, '2013-02-01', 3500.00, 2),
+	('Peter', 'Petrov', 'Petrov', 'Senior Engineer', 1, '2004-03-02', 4000.00, 1)
+	/*('Ivan', 'Ivanov', 'Ivanov', '.NET Developer', 4, '2004-03-01', 3500.00),
+	('Ivan', 'Ivanov', 'Ivanov', '.NET Developer', 4, '2013-02-01', 3500.00),
+	('Ivan', 'Ivanov', 'Ivanov', '.NET Developer', 4, '2013-02-01', 3500.00)*/
+
+--Problem 19
+SELECT * FROM [Towns]
+SELECT * FROM [Departments]
+SELECT * FROM [Employees]
+
+--Problem 20
+SELECT * FROM [Towns]
+ORDER BY [Name]
+
+SELECT * FROM [Departments]
+ORDER BY [NAME]
+
+SELECT * FROM [Employees]
+ORDER BY [Salary]
+
+--Problem 21
+SELECT [Name] FROM Towns
+ORDER BY [Name]
+
+SELECT [Name] FROM Departments
+ORDER BY [Name]
+
+SELECT FirstName, LastName, JobTitle, Salary FROM Employees
+ORDER BY Salary DESC
