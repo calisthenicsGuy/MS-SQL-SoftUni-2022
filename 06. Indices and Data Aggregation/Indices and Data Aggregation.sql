@@ -95,4 +95,33 @@ SELECT ABS(SUM(tt.DepositDifference)) AS SumDifference FROM
 	 FROM WizzardDeposits AS wiz1
 	 JOIN WizzardDeposits AS wiz2 ON wiz1.Id = (wiz2.Id + 1)) AS tt	 
 
+--Problem 18:
+USE [SoftUni]
 
+SELECT [DepartmentID], [Salary]
+  FROM 
+	 (
+		   SELECT [d].[DepartmentID], 
+		   [Salary],
+		   ROW_NUMBER() OVER (PARTITION BY [d].[DepartmentID] ORDER BY [e].[Salary] DESC) AS [SalaryRanking]
+			 FROM [Departments] AS [d]
+		LEFT JOIN [Employees] AS [e]
+			   ON [d].[DepartmentId] = [e].[DepartmentId]
+     ) AS [DepartmentIDQuery]
+	 WHERE [SalaryRanking] = 3
+
+--Problem 19:
+SELECT TOP (10) [FirstName], 
+			    [LastName], 
+				[DepartmentID]
+
+				FROM [Employees]
+				  AS [e]
+			   WHERE [Salary] > (
+										SELECT AVG([Salary]) AS [AvreageSalaryByDepartment]
+										  FROM [Employees]
+											AS [esub]
+										 WHERE [e].[DepartmentID] = [esub].[DepartmentID]										
+									  GROUP BY [DepartmentID]
+							     )
+            ORDER BY [e].[DepartmentID]
